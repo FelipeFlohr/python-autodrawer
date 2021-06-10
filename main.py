@@ -1,7 +1,7 @@
-from ctypes.wintypes import PLARGE_INTEGER
 import pyautogui
 from PIL import Image
 from time import sleep
+from sys import exit as sair
 import keyboard
 
 # Pega o valor RGB de um pixel de uma imagem
@@ -152,6 +152,15 @@ class Imagem:
         :param foto: The address of your image
         '''
         self.foto = foto
+    
+    def valores_repetidos(self, valor, lista):
+        pos = -1
+        for c in range(0, len(lista)):
+            if valor in lista[c]:
+                pos = c
+            else:
+                pass
+        return pos
 
     def gerar_lista_pixels(self, canvas_x, canvas_y, debug=False):
         '''
@@ -166,31 +175,27 @@ class Imagem:
         tamanho = imagem.size
         if tamanho[0] > canvas_x or tamanho[1] > canvas_y:
             raise ValueError('O Tamanho da foto é maior que o tamanho da área do canvas. Por favor, reduza o tamanho da foto ou aumente o tamanho do canvas.')
+
         lista = list()
+
         for x in range(0, tamanho[0]):
             for y in range(0, tamanho[1]):
-                if debug == True:
-                    print('COORDENADA: x={} y={} | RGB: {}'.format(x, y, pixel[x, y]))
-                dict = {'xy': (x, y), 'rgb': pixel[x, y]}
-                lista.append(dict.copy())
-        return lista
-
-    def limpar_lista(self, lista):
-        lista_nova = lista[:]
-        cor_anterior = (0, 0 ,0)
-        contagem_inicio = 1
-        contagem_final = 1
-        for c in range(0, len(lista)):
-            if c == 0:
-                cor_anterior = lista[c]['rgb']
-            else:
-                if lista[c]['rgb'] == cor_anterior:
-                    contagem_final += 1
+                cor_pixel_atual = pixel[x, y]
+                if len(cor_pixel_atual) == 4 and cor_pixel_atual[3] != 255:
+                    if debug == True and cor_pixel_atual != (0, 0, 0, 0):
+                        print(cor_pixel_atual)
+                        print('Há translucidade. Passando')
+                        sleep(0.5)
+                    else:
+                        pass
                 else:
-                    del lista_nova[contagem_inicio:contagem_final]
-                    contagem_inicio = 1
-                    contagem_final = 1
-        return lista_nova
+                    if self.valores_repetidos(cor_pixel_atual, lista) == -1:
+                        dict = {(cor_pixel_atual): [(x, y)]}
+                        lista.append(dict.copy())
+                    else:
+                        tupla = (x, y)
+                        lista[self.valores_repetidos(cor_pixel_atual, lista)][cor_pixel_atual].append(tupla[:])
+        return lista
 
     def tamanho_foto(self):
         imagem = Image.open(self.foto)
@@ -205,7 +210,18 @@ class Funcoes:
         self.pos_cores = pos_cores
         self.pos_okbutton = pos_okbutton
 
-    def editar_cor(self, r, g, b):
+    def pegarListaDict(self, dict, valor, debug=False):
+        if debug == True:
+            print('valor = ', valor)
+            print('len dict = ', len(dict))
+        lista = list()
+        for key in dict.keys():
+            lista.append(key)
+        if debug == True:
+            print(lista)
+        return lista
+
+    def editar_cor(self, r, g, b, delay=True):
         '''
         -> A function for changing the color of the selected tool
         :param r: The R value
@@ -219,7 +235,8 @@ class Funcoes:
 
         # Moving to edit an added color
         pyautogui.moveTo(x=self.pos_cores[0], y=self.pos_cores[1])
-        sleep(2)
+        if delay == True:
+            sleep(2)
         pyautogui.click(button='right')
         pyautogui.moveTo(x=self.pos_cores[0] + 8, y=self.pos_cores[1] + 5)
         pyautogui.click(button='left')
@@ -241,7 +258,8 @@ class Funcoes:
 
         # Moving to OK button
         pyautogui.moveTo(x=self.pos_okbutton[0], y=self.pos_okbutton[1])
-        sleep(1)
+        if delay == True:
+            sleep(1)
         pyautogui.click(button='left')
         pyautogui.click(button='left')
     
@@ -287,51 +305,87 @@ class Funcoes:
         except:
             return (0, 0, 0)
     
-    def desenhar(self, pos_tamanhoDeseho, lista_pixels, pos_centroCanvas=(856, 592)):
-        pos_inicial = self.pos_inicial_desenho(pos_tamanhoDeseho)
-        cor_anterior = (-1, -1, -1)
-        cor_proximopx = (0, 0, 0)
+    def desenhar(self, pos_tamanhoDeseho, lista_pixels, pos_centroCanvas=(856, 592), debug=False):
+        try:
+            pos_inicial = self.pos_inicial_desenho(pos_tamanhoDeseho)
 
-        if cor_anterior == (-1, -1, -1):
-            try:
-                cor = (lista_pixels[0]['rgb'][0], lista_pixels[0]['rgb'][1], lista_pixels[0]['rgb'][2], lista_pixels[0]['rgb'][3])
-                cor_anterior = (-2, -2, -2)
-            except:
-                self.editar_cor(r=lista_pixels[0]['rgb'][0], g=lista_pixels[0]['rgb'][1], b=lista_pixels[0]['rgb'][2])
-                cor_anterior = (lista_pixels[0]['rgb'][0], lista_pixels[0]['rgb'][1], lista_pixels[0]['rgb'][2])
+            cores_diferentes = len(lista_pixels)
 
-        for c in range(0, len(lista_pixels)):
-            if c == 0:
-                if cor_anterior == (-2, -2, -2):
-                    pass
-                else:
-                    pyautogui.moveTo(pos_inicial[0], pos_inicial[1])
+            for c in range(0, cores_diferentes):
+                r = self.pegarListaDict(lista_pixels[c], c)[0][0]
+                g = self.pegarListaDict(lista_pixels[c], c)[0][1]
+                b = self.pegarListaDict(lista_pixels[c], c)[0][2]
+
+                if debug == True:
+                    print(r, g, b)
+                
+                pos_diferentes = len(lista_pixels[c][self.pegarListaDict(lista_pixels[c], c)[0]])
+
+                if debug == True:
+                    print('Quantidade de posições diferentes =', pos_diferentes)
+                
+                self.editar_cor(r, g, b)
+
+                for count in range(0, pos_diferentes):
+                    x=lista_pixels[c][(r, g, b)][count][0]#pos_inicial[0] + lista_pixels[count][(r, g, b)][0][0]
+                    y=lista_pixels[c][(r, g, b)][count][1]#pos_inicial[1] + lista_pixels[count][(r, g, b)][0][1]
+
+                    pyautogui.moveTo(x=pos_inicial[0] + x, y=pos_inicial[1] + y)
                     pyautogui.click(button='left')
-                    cor_proximopx = self.cor_proximopixel(lista_pixels, c)
-            else:
-                if cor_proximopx == (-2, -2, -2):
-                    cor_proximopx = self.cor_proximopixel(lista_pixels, c)
-                else:
-                    if cor_anterior == cor_proximopx:
-                        pyautogui.dragTo(x=pos_inicial[0] + lista_pixels[c]['xy'][0], y=pos_inicial[1] + lista_pixels[c]['xy'][1], button='left')
-                        cor_anterior = cor_proximopx
-                        cor_proximopx = self.cor_proximopixel(lista_pixels, c)
-                    else:
-                        self.editar_cor(cor_proximopx[0], cor_proximopx[1], cor_proximopx[2])
-                        pyautogui.dragTo(x=pos_inicial[0] + lista_pixels[c]['xy'][0], y=pos_inicial[1] + lista_pixels[c]['xy'][1], button='left')
-                        cor_anterior = cor_proximopx
-                        cor_proximopx = self.cor_proximopixel(lista_pixels, c)
+
+                    if debug == True:
+                        #print(lista_pixels[count][(r, g, b)])
+                        print(f'x = {x}; y = {y}')
+                '''
+                x=pos_inicial[0] + lista_pixels[c][(r, g, b)][0][0]
+                y=pos_inicial[1] + lista_pixels[c][(r, g, b)][0][1]
+                print(x, y)
+
+                self.editar_cor(r=r, g=g, b=b)
+                for count in range(0, len(lista_pixels[c])):
+                    #print('x = {} + {} y = {} + {}'.format(pos_inicial[0], lista_pixels[c][(r, g, b)][0][0], pos_inicial[1], lista_pixels[c][(r, g, b)][1][1]))
+                    pyautogui.moveTo(x=x, y=y)
+                    pyautogui.click(button='left')
+                '''
+        #         if c == 0:
+        #             if cor_anterior == (-2, -2, -2):
+        #                 print('Transparencia')
+        #                 cor_proximopx = self.cor_proximopixel(lista_pixels, c)
+        #             else:
+        #                 pyautogui.moveTo(pos_inicial[0], pos_inicial[1])
+        #                 pyautogui.click(button='left')
+        #                 cor_proximopx = self.cor_proximopixel(lista_pixels, c)
+        #         else:
+        #             if cor_proximopx == (-2, -2, -2):
+        #                 cor_proximopx = self.cor_proximopixel(lista_pixels, c)
+        #             else:
+        #                 if cor_anterior == cor_proximopx:0
+        #                     pyautogui.dragTo(x=pos_inicial[0] + lista_pixels[c]['xy'][0], y=pos_inicial[1] + lista_pixels[c]['xy'][1], button='left')
+        #                     cor_anterior = cor_proximopx
+        #                     cor_proximopx = self.cor_proximopixel(lista_pixels, c)
+        #                 else:
+        #                     self.editar_cor(cor_proximopx[0], cor_proximopx[1], cor_proximopx[2])
+        #                     pyautogui.moveTo(x=pos_inicial[0] + lista_pixels[c]['xy'][0], y=pos_inicial[1] + lista_pixels[c]['xy'][1])
+        #                     pyautogui.click(button='left')
+        #                     cor_anterior = cor_proximopx
+        #                     cor_proximopx = self.cor_proximopixel(lista_pixels, c)
+        except KeyboardInterrupt:
+            sair
 
 
 debugs = Debug(434, 315, 1273, 862)
-foto = Imagem('files/images/imagemteste.png')
+foto = Imagem('files/images/santo.jpg')
 func = Funcoes()
 
 # pos inicial = (600, 336)
 
 print(debugs.tamanho_monitor())
-lista = foto.gerar_lista_pixels(foto.tamanho_foto()[0], foto.tamanho_foto()[1])
+lista = foto.gerar_lista_pixels(foto.tamanho_foto()[0], foto.tamanho_foto()[1], True)
+#print(lista)
+#print(func.pegarListaDict(lista[0], 0)[0])
+#print(len(lista))
 debugs.centralizar_canvas()
-func.mudar_ferramenta('pixelpen', 1)
+func.mudar_ferramenta('pencil', 10)
 sleep(3)
-func.desenhar(foto.tamanho_foto(), lista)
+# print(lista[0])
+func.desenhar(foto.tamanho_foto(), lista, debug=True)
