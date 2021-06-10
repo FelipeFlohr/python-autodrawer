@@ -315,6 +315,10 @@ class Funcoes:
                 r = self.pegarListaDict(lista_pixels[c], c)[0][0]
                 g = self.pegarListaDict(lista_pixels[c], c)[0][1]
                 b = self.pegarListaDict(lista_pixels[c], c)[0][2]
+                if len(self.pegarListaDict(lista_pixels[c], c)[0]) == 4:
+                    a = self.pegarListaDict(lista_pixels[c], c)[0][3]
+                else:
+                    pass
 
                 if debug == True:
                     print(r, g, b)
@@ -327,65 +331,29 @@ class Funcoes:
                 self.editar_cor(r, g, b)
 
                 for count in range(0, pos_diferentes):
-                    x=lista_pixels[c][(r, g, b)][count][0]#pos_inicial[0] + lista_pixels[count][(r, g, b)][0][0]
-                    y=lista_pixels[c][(r, g, b)][count][1]#pos_inicial[1] + lista_pixels[count][(r, g, b)][0][1]
+                    try:
+                        x=lista_pixels[c][(r, g, b, a)][count][0]
+                        y=lista_pixels[c][(r, g, b, a)][count][1]
+                    except:
+                        x=lista_pixels[c][(r, g, b)][count][0]
+                        y=lista_pixels[c][(r, g, b)][count][1]
+                    print(f'x = {x}; y = {y}')
 
                     pyautogui.moveTo(x=pos_inicial[0] + x, y=pos_inicial[1] + y)
                     pyautogui.click(button='left')
-
-                    if debug == True:
-                        #print(lista_pixels[count][(r, g, b)])
-                        print(f'x = {x}; y = {y}')
-                '''
-                x=pos_inicial[0] + lista_pixels[c][(r, g, b)][0][0]
-                y=pos_inicial[1] + lista_pixels[c][(r, g, b)][0][1]
-                print(x, y)
-
-                self.editar_cor(r=r, g=g, b=b)
-                for count in range(0, len(lista_pixels[c])):
-                    #print('x = {} + {} y = {} + {}'.format(pos_inicial[0], lista_pixels[c][(r, g, b)][0][0], pos_inicial[1], lista_pixels[c][(r, g, b)][1][1]))
-                    pyautogui.moveTo(x=x, y=y)
-                    pyautogui.click(button='left')
-                '''
-        #         if c == 0:
-        #             if cor_anterior == (-2, -2, -2):
-        #                 print('Transparencia')
-        #                 cor_proximopx = self.cor_proximopixel(lista_pixels, c)
-        #             else:
-        #                 pyautogui.moveTo(pos_inicial[0], pos_inicial[1])
-        #                 pyautogui.click(button='left')
-        #                 cor_proximopx = self.cor_proximopixel(lista_pixels, c)
-        #         else:
-        #             if cor_proximopx == (-2, -2, -2):
-        #                 cor_proximopx = self.cor_proximopixel(lista_pixels, c)
-        #             else:
-        #                 if cor_anterior == cor_proximopx:0
-        #                     pyautogui.dragTo(x=pos_inicial[0] + lista_pixels[c]['xy'][0], y=pos_inicial[1] + lista_pixels[c]['xy'][1], button='left')
-        #                     cor_anterior = cor_proximopx
-        #                     cor_proximopx = self.cor_proximopixel(lista_pixels, c)
-        #                 else:
-        #                     self.editar_cor(cor_proximopx[0], cor_proximopx[1], cor_proximopx[2])
-        #                     pyautogui.moveTo(x=pos_inicial[0] + lista_pixels[c]['xy'][0], y=pos_inicial[1] + lista_pixels[c]['xy'][1])
-        #                     pyautogui.click(button='left')
-        #                     cor_anterior = cor_proximopx
-        #                     cor_proximopx = self.cor_proximopixel(lista_pixels, c)
         except KeyboardInterrupt:
             sair
 
 
 debugs = Debug(434, 315, 1273, 862)
-foto = Imagem('files/images/santo.jpg')
+foto = Imagem('files/images/abappng.png')
 func = Funcoes()
 
 # pos inicial = (600, 336)
 
 print(debugs.tamanho_monitor())
-lista = foto.gerar_lista_pixels(foto.tamanho_foto()[0], foto.tamanho_foto()[1], True)
-#print(lista)
-#print(func.pegarListaDict(lista[0], 0)[0])
-#print(len(lista))
+lista = foto.gerar_lista_pixels(foto.tamanho_foto()[0], foto.tamanho_foto()[1])
 debugs.centralizar_canvas()
 func.mudar_ferramenta('pencil', 10)
 sleep(3)
-# print(lista[0])
 func.desenhar(foto.tamanho_foto(), lista, debug=True)
