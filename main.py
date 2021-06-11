@@ -181,7 +181,7 @@ class Imagem:
         for x in range(0, tamanho[0]):
             for y in range(0, tamanho[1]):
                 cor_pixel_atual = pixel[x, y]
-                if len(cor_pixel_atual) == 4 and cor_pixel_atual[3] != 255:
+                if len(cor_pixel_atual) == 4 and cor_pixel_atual[3] == 0:
                     if debug == True and cor_pixel_atual != (0, 0, 0, 0):
                         print(cor_pixel_atual)
                         print('Há translucidade. Passando')
@@ -346,14 +346,14 @@ class Funcoes:
 
 
 debugs = Debug(434, 315, 1273, 862)
-foto = Imagem('files/images/abappng.png')
+foto = Imagem('images/abappng.png')
 func = Funcoes()
 
 # pos inicial = (600, 336)
 
 print(debugs.tamanho_monitor())
-lista = foto.gerar_lista_pixels(foto.tamanho_foto()[0], foto.tamanho_foto()[1])
+lista = foto.gerar_lista_pixels(1273, 862)
 debugs.centralizar_canvas()
 func.mudar_ferramenta('pencil', 10)
 sleep(3)
-func.desenhar(foto.tamanho_foto(), lista, debug=True)
+func.desenhar(foto.tamanho_foto(), lista, debug=False)
