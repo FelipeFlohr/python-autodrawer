@@ -1,7 +1,9 @@
+import os
 import pyautogui
+import keyboard
 from PIL import Image
 from time import sleep
-from sys import exit as sair
+from threading import Thread
 
 # Pega o valor RGB de um pixel de uma imagem
 # imagem = Image.open('imagemteste.png')
@@ -23,7 +25,7 @@ from sys import exit as sair
 class Debug:
     def __init__(self, inicio_canvas_x, inicio_canvas_y, final_canvas_x, final_canvas_y, monitor_x=1920, monitor_y=1080):
         '''
-        -> Starter
+        -> Constructor
         :param inicio_canvas_x: The upper left X position of your canvas
         :param inicio_canvas_y: The upper left Y position of your canvas
         :param final_canvas_x: The bottom right X position of your canvas
@@ -37,6 +39,45 @@ class Debug:
         self.final_canvas_y = final_canvas_y
         self.monitor_x = monitor_x
         self.monitor_y = monitor_y
+
+    def verificar_imagem_tamanho(self, imagem_tamanho):
+        if imagem_tamanho[0] > (self.final_canvas_x - self.inicio_canvas_x):        
+            print('Tamanho X =', imagem_tamanho[0])
+            print('Tamanho X Canvas =', (self.final_canvas_x - self.inicio_canvas_x))
+            print("The X size of the image is bigger than the canvas' size.")
+            while True:
+                pergunta = str(input('Do you want to continue anyway (WARNING: Errors may occur)[Y/N]?')).strip().upper()[0]
+                if pergunta != 'N' and pergunta != 'Y':
+                    pergunta = str(input('Invalid answer. Do you want to continue anyway (WARNING: Errors may occur)[Y/N]?')).strip().upper()[0]
+                if pergunta == 'N':
+                    print('Encerrando programa...')
+                    sleep(1.5)
+                    os._exit()
+                elif pergunta == 'Y':
+                    pass
+        elif imagem_tamanho[1] > (self.final_canvas_y - self.inicio_canvas_y):
+            print('Tamanho Y =', imagem_tamanho[1])
+            print('Tamanho Y Canvas =', (self.final_canvas_y - self.inicio_canvas_y))
+            print("The X size of the image is bigger than the canvas' size.")
+            while True:
+                pergunta = str(input('Do you want to continue anyway (WARNING: Errors may occur)[Y/N]?')).strip().upper()[0]
+                if pergunta != 'N' and pergunta != 'Y':
+                    pergunta = str(input('Invalid answer. Do you want to continue anyway (WARNING: Errors may occur)[Y/N]?')).strip().upper()[0]
+                if pergunta == 'N':
+                    print('Encerrando programa...')
+                    sleep(1.5)
+                    os._exit()
+                elif pergunta == 'Y':
+                    pass
+        else:
+            print('Tamanho da Foto: OK')
+
+    def desenhar4cantos(self):
+        pyautogui.moveTo(self.inicio_canvas_x, self.inicio_canvas_y, _pause=False)
+        pyautogui.dragTo(self.final_canvas_x, self.inicio_canvas_y, button='left', _pause=False)
+        pyautogui.dragTo(self.final_canvas_x, self.final_canvas_y, button='left', _pause=False)
+        pyautogui.dragTo(self.inicio_canvas_x, self.final_canvas_y, button='left', _pause=False)
+        pyautogui.dragTo(self.inicio_canvas_x, self.inicio_canvas_y, _pause=False, button='left')
 
     def centralizar_canvas(self, zoom=33, debug=False): # Bug -> Esse método não funciona se o NumLock estiver ligado
         '''
@@ -55,6 +96,7 @@ class Debug:
         pyautogui.moveTo(x=1576, y=102)
         pyautogui.click(button='left')
         pyautogui.write(str(zoom))
+        pyautogui.press('enter')
         if debug == True:
             print('Canvas centralizado!')
 
@@ -62,7 +104,7 @@ class Debug:
         '''
         -> This will move your cursor to all the edges of your canvas. It is just for debugging
         :param delay: Turn on/off the delay for moving the cursor
-        :return:
+        :return: No return
         '''
         if delay == True:
             print('Movendo o cursor do Mouse para os quatro quantos do canvas em 5...')
@@ -85,33 +127,28 @@ class Debug:
         :return: Return a string with your monitor's resolution
         '''
         return 'DEBUG: O tamanho do seu monitor é: {}x{}'.format(pyautogui.size()[0], pyautogui.size()[1])
-
-    def mostrar_pos_mouse(self, secs=15):
-        '''
-        -> This will print the position of your cursor
-        :secs: The amount of seconds this method will be running
-        :return: no return
-        '''
-        for c in range(0, secs):
-            pos = pyautogui.position()
-            print(pos)
-            sleep(0.5)
     
-    def centralizar_cursor(self, delay=True, pos_centroCanvas=(856, 592)):
-        '''
-        -> This will move the cursor to the center of the screen
-        :param delay: If true, a delay will be set before the cursor be moved
-        :param pos_centroCanvas: A tuple with two values. The first value is the X position of the center of the canvas, and the second is the Y position of the center of the canvas
-        :return: No return
-        '''
-        sleep(2)
-        pyautogui.moveTo(pos_centroCanvas[0], pos_centroCanvas[1])
+    def centro_canvas(self):
+        posa = (self.inicio_canvas_x, self.inicio_canvas_y)
+        posb = (self.final_canvas_x, self.inicio_canvas_y)
+        posc = (self.inicio_canvas_x, self.final_canvas_y)
+        distx = posa[0] + ((posb[0] - posa[0]) / 2)
+        disty = posa[1] + ((posc[1] - posa[1]) / 2)
+        return (distx, disty)
+
+    def fecharPrograma(self, tecla='space'):
+        while True:
+            if keyboard.is_pressed('space') == True:
+                print(f'Tecla {tecla} apertada. Encerrando o programa')
+                os._exit(0)
+            else:
+                sleep(0.5)
 
 
 class Imagem:
     def __init__(self, foto : str):
         '''
-        -> Starter
+        -> Constructor
         :param foto: The address of your image
         '''
         self.foto = foto
@@ -131,19 +168,15 @@ class Imagem:
                 pass
         return pos
 
-    def gerar_lista_pixels(self, canvas_x, canvas_y, debug=False):
+    def gerar_lista_pixels(self, debug=False):
         '''
         -> This will generate a list containg the RGB of each pixel in the image
-        :param canvas_x: The X size of your image
-        :param canvas_y: The Y size of your image
         :param debug: If it is true, it will print a confirmation for each X and Y RGB generated
         :return: Will return the list containg the RGB of each pixel
         '''
         imagem = Image.open(self.foto)
         pixel = imagem.load()
         tamanho = imagem.size
-        if tamanho[0] > canvas_x or tamanho[1] > canvas_y:
-            raise ValueError('O Tamanho da foto é maior que o tamanho da área do canvas. Por favor, reduza o tamanho da foto ou aumente o tamanho do canvas.')
 
         lista = list()
 
@@ -157,8 +190,8 @@ class Imagem:
                         sleep(0.5)
                     else:
                         pass
-                elif cor_pixel_atual[0] > 10 and cor_pixel_atual[1] > 10 and cor_pixel_atual[2] > 10:
-                    pass
+                # elif cor_pixel_atual[0] < 97 or cor_pixel_atual[1] < 97 or cor_pixel_atual[2] < 97:
+                #     pass
                 else:
                     if self.valores_repetidos(cor_pixel_atual, lista) == -1:
                         dict = {(cor_pixel_atual): [(x, y)]}
@@ -180,7 +213,7 @@ class Imagem:
 class Funcoes:
     def __init__(self, pos_r=(1145, 493), pos_g=(1145, 550), pos_b=(1145, 606), pos_cores=(1695, 997), pos_okbutton=(851, 728)):
         '''
-        -> Starter
+        -> Constructor
         :param pos_r: A tuple with two values. The first one is the X position of the R value in the color changer. The second one is the Y position of the R value in the color changer
         :param pos_g: A tuple with two values. The first one is the X position of the G value in the color changer. The second one is the Y position of the G value in the color changer
         :param pos_b: A tuple with two values. The first one is the X position of the B value in the color changer. The second one is the Y position of the B value in the color changer
@@ -314,55 +347,56 @@ class Funcoes:
         :param debug: If true, will print the debug things
         :return: No return
         '''
-        try:
-            pos_inicial = self.pos_inicial_desenho(pos_tamanhoDeseho)
+        pos_inicial = self.pos_inicial_desenho(pos_tamanhoDeseho)
 
-            cores_diferentes = len(lista_pixels)
+        cores_diferentes = len(lista_pixels)
 
-            for c in range(0, cores_diferentes):
-                r = self.pegarListaDict(lista_pixels[c], c)[0][0]
-                g = self.pegarListaDict(lista_pixels[c], c)[0][1]
-                b = self.pegarListaDict(lista_pixels[c], c)[0][2]
-                if len(self.pegarListaDict(lista_pixels[c], c)[0]) == 4:
-                    a = self.pegarListaDict(lista_pixels[c], c)[0][3]
-                else:
-                    pass
+        for c in range(0, cores_diferentes):
+            r = self.pegarListaDict(lista_pixels[c], c)[0][0]
+            g = self.pegarListaDict(lista_pixels[c], c)[0][1]
+            b = self.pegarListaDict(lista_pixels[c], c)[0][2]
+            if len(self.pegarListaDict(lista_pixels[c], c)[0]) == 4:
+                a = self.pegarListaDict(lista_pixels[c], c)[0][3]
+            else:
+                pass
 
+            if debug == True:
+                print(r, g, b)
+            
+            pos_diferentes = len(lista_pixels[c][self.pegarListaDict(lista_pixels[c], c)[0]])
+
+            if debug == True:
+                print('Quantidade de posições diferentes =', pos_diferentes)
+            
+            self.editar_cor(r, g, b)
+
+            for count in range(0, pos_diferentes):
+                try:
+                    x=lista_pixels[c][(r, g, b, a)][count][0]
+                    y=lista_pixels[c][(r, g, b, a)][count][1]
+                except:
+                    x=lista_pixels[c][(r, g, b)][count][0]
+                    y=lista_pixels[c][(r, g, b)][count][1]
                 if debug == True:
-                    print(r, g, b)
-                
-                pos_diferentes = len(lista_pixels[c][self.pegarListaDict(lista_pixels[c], c)[0]])
+                    print(f'x = {x}; y = {y}')
 
-                if debug == True:
-                    print('Quantidade de posições diferentes =', pos_diferentes)
-                
-                self.editar_cor(r, g, b)
-
-                for count in range(0, pos_diferentes):
-                    try:
-                        x=lista_pixels[c][(r, g, b, a)][count][0]
-                        y=lista_pixels[c][(r, g, b, a)][count][1]
-                    except:
-                        x=lista_pixels[c][(r, g, b)][count][0]
-                        y=lista_pixels[c][(r, g, b)][count][1]
-                    if debug == True:
-                        print(f'x = {x}; y = {y}')
-
-                    pyautogui.moveTo(x=pos_inicial[0] + x, y=pos_inicial[1] + y)
-                    pyautogui.click(button='left')
-        except KeyboardInterrupt:
-            sair
+                pyautogui.moveTo(x=pos_inicial[0] + x, y=pos_inicial[1] + y, _pause=False)
+                pyautogui.click(button='left', _pause=False)
+                sleep(0.001)
 
 
 debugs = Debug(434, 315, 1273, 862)
-foto = Imagem('images/lupa jpg.jpg')
+foto = Imagem('images/vai mano.png')
 func = Funcoes()
 
 # pos inicial = (600, 336)
 
 print(debugs.tamanho_monitor())
-lista = foto.gerar_lista_pixels(1273, 862)
 debugs.centralizar_canvas()
-func.mudar_ferramenta('pencil', 6, 30)
+debugs.verificar_imagem_tamanho(foto.tamanho_foto())
+lista = foto.gerar_lista_pixels()
+func.mudar_ferramenta('pencil', 6, 60)
 sleep(3)
-func.desenhar(foto.tamanho_foto(), lista, debug=False)
+
+Thread(target=func.desenhar, args=[foto.tamanho_foto(), lista]).start()
+Thread(target=debugs.fecharPrograma).start()
