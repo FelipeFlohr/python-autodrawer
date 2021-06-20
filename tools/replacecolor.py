@@ -4,7 +4,7 @@ from time import sleep
 class Imagem:
     def __init__(self, foto : str):
         '''
-        -> Starter
+        -> Constructor
         :param foto: The address of your image
         '''
         self.foto = foto
@@ -68,13 +68,15 @@ class Imagem:
             for y in range(0, tamanho_y):
                 if pixel[x, y] == cororiginal:
                     pixel[x, y] = corsubstituir
+                    #print('Pixel substituido')
                 else:
                     pass
         imagem.save(nomearquivo)
 
 
-imagem = Imagem('tools/image/santa.png')
+imagem = Imagem('tools/image/deutsche volke.png')
 
 lista = imagem.gerar_lista_pixels(imagem.tamanho_foto()[0], imagem.tamanho_foto()[1])
+print(lista[0].keys())
 print('Há {} cores diferentes.'.format(len(lista)))
-imagem.substituircor((255, 255, 255, 255), (0, 0, 0, 0), 'santa2.png')
+imagem.substituircor((255, 255, 255, 255), (255, 255, 20, 0), 'preussens.png')
