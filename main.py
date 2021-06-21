@@ -214,11 +214,11 @@ class Funcoes:
     def __init__(self, pos_r=(1145, 493), pos_g=(1145, 550), pos_b=(1145, 606), pos_cores=(1695, 997), pos_okbutton=(851, 728)):
         '''
         -> Constructor
-        :param pos_r: A tuple with two values. The first one is the X position of the R value in the color changer. The second one is the Y position of the R value in the color changer
-        :param pos_g: A tuple with two values. The first one is the X position of the G value in the color changer. The second one is the Y position of the G value in the color changer
-        :param pos_b: A tuple with two values. The first one is the X position of the B value in the color changer. The second one is the Y position of the B value in the color changer
-        :param pos_cores: A tuple with two values. The first one is the X position of the color to be changed in the color pallette. The second one is the Y position of the color to be changed in the color pallette
-        :param pos_okbutton: A tuple with two values. The first one is the X position of the OK button in the color changer. The second one is the Y position of the OK button in the color changer
+        :param pos_r: A tuple with two values. The first one is the X position of the R value in the color selector. The second one is the Y position of the R value in the color selector
+        :param pos_g: A tuple with two values. The first one is the X position of the G value in the color selector. The second one is the Y position of the G value in the color selector
+        :param pos_b: A tuple with two values. The first one is the X position of the B value in the color selector. The second one is the Y position of the B value in the color selector
+        :param pos_cores: A tuple with two values. The first one is the X position of the color to be changed in the color palette. The second one is the Y position of the color to be changed in the color palette
+        :param pos_okbutton: A tuple with two values. The first one is the X position of the OK button in the color selector. The second one is the Y position of the OK button in the color selector
         '''
         self.pos_r = pos_r
         self.pos_g = pos_g
@@ -321,7 +321,7 @@ class Funcoes:
         pyautogui.move(-80, 0)
         pyautogui.click(button='left')
     
-    def pos_inicial_desenho(self, pos_tamanhoDesenho, pos_centroCanvas=(856, 592)):
+    def pos_inicial_desenho(self, pos_tamanhoDesenho, pos_centroCanvas):
         '''
         -> This will set the initial position where the cursor will be moved, then it will start to draw
         :param pos_tamanhoDesenho: Must be a tuple with two values. The first value is the X size of the photo. The second value is the Y size of the photo
