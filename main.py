@@ -23,6 +23,7 @@ from ini_parser import Parameters as Pm
 # tamanho da tela = 1370x886
 # centro do canvas = x=856px y=592px
 
+
 class Debug(Pm):
     def __init__(self, monitor_x=1920, monitor_y=1080):
         '''
@@ -35,12 +36,12 @@ class Debug(Pm):
         self.monitor_y = monitor_y
 
     def verificar_imagem_tamanho(self, imagem_tamanho):
-        '''
+        """
         -> Verifies if the image's size is equal or smaller than the canvas' size. If not, then it will ask if you want to continue anyways.
         :param imagem_tamanho: A tuple with two values. The first one is the X size of the image, and the second one is the Y size of the image
         :return: No return
-        '''
-        if imagem_tamanho[0] > (Pm.canvas_bottomrightx(self) - Pm.canvas_topleftx(self)):        
+        """
+        if imagem_tamanho[0] > (Pm.canvas_bottomrightx(self) - Pm.canvas_topleftx(self)):
             print('Tamanho X =', imagem_tamanho[0])
             print('Tamanho X Canvas =', (Pm.canvas_bottomrightx(self) - Pm.canvas_topleftx(self)))
             print("The X size of the image is bigger than the canvas' size.")
@@ -72,10 +73,10 @@ class Debug(Pm):
             print('Tamanho da Foto: OK')
 
     def desenhar4cantos(self):
-        '''
+        """
         -> Will draw a rectangle, showing the total size of the canvas
         :return:
-        '''
+        """
         pyautogui.moveTo(Pm.canvas_topleftx(self), Pm.canvas_toplefty(self), _pause=False)
         pyautogui.dragTo(Pm.canvas_bottomrightx(self), Pm.canvas_toplefty(self), button='left', _pause=False)
         pyautogui.dragTo(Pm.canvas_bottomrightx(self), Pm.canvas_bottomrighty(self), button='left', _pause=False)
@@ -83,11 +84,11 @@ class Debug(Pm):
         pyautogui.dragTo(Pm.canvas_topleftx(self), Pm.canvas_toplefty(self), _pause=False, button='left')
 
     def centralizar_canvas(self, debug=False): # Bug -> Esse método não funciona se o NumLock estiver ligado
-        '''
+        """
         -> This will centralize the canvas based on the specified zoom
         :param debug: This will print the debug things
         :return: No return
-        '''
+        """
         print('Abra o paint em 5 segundos')
         sleep(5)
         pyautogui.moveTo(self.monitor_x//2, self.monitor_y//2)
@@ -99,16 +100,16 @@ class Debug(Pm):
         pyautogui.click(button='left')
         pyautogui.write(str(Pm.canvas_zoom(self)))
         pyautogui.press('enter')
-        if debug == True:
+        if debug:
             print('Canvas centralizado!')
 
     def mover_cursor_4cantos(self, delay=False):
-        '''
+        """
         -> This will move your cursor to all the edges of your canvas. It is just for debugging
         :param delay: Turn on/off the delay for moving the cursor
         :return: No return
-        '''
-        if delay == True:
+        """
+        if delay:
             print('Movendo o cursor do Mouse para os quatro quantos do canvas em 5...')
             sleep(5)
         else:
@@ -124,17 +125,17 @@ class Debug(Pm):
         pyautogui.moveTo(posoriginal_x, posoriginal_y) # Retorna para a oposição original
 
     def tamanho_monitor(self):
-        '''
+        """
         -> Just get the resolution of your monitor
         :return: Return a string with your monitor's resolution
-        '''
+        """
         return 'DEBUG: O tamanho do seu monitor é: {}x{}'.format(pyautogui.size()[0], pyautogui.size()[1])
 
     def centro_canvas(self):
-        '''
+        """
         -> Will return a tuple with the center position of the Canvas
         :return: A tuple with two values. The first one is the X position of the canvas' center. The second one is the Y position of the canvas' center
-        '''
+        """
         posa = (Pm.canvas_topleftx(self), Pm.canvas_toplefty(self))
         posb = (Pm.canvas_bottomrightx(self), Pm.canvas_toplefty(self))
         posc = (Pm.canvas_topleftx(self), Pm.canvas_bottomrighty(self))
@@ -143,13 +144,13 @@ class Debug(Pm):
         return (distx, disty)
 
     def fecharPrograma(self):
-        '''
+        """
         -> A method to exit the program
         :return: No return
-        '''
+        """
         tecla = Pm.keyboard_interruptionKey(self)
         while True:
-            if keyboard.is_pressed(tecla) == True:
+            if keyboard.is_pressed(tecla):
                 print(f'Tecla {tecla} apertada. Encerrando o programa')
                 os._exit(0)
             else:
@@ -162,7 +163,7 @@ class Imagem(Pm):
         -> Constructor
         '''
         Pm.__init__(Pm, 'config.ini')
-    
+
     def valores_repetidos(self, valor, lista):
         '''
         -> This will find the index of an equal value inside a list
@@ -179,11 +180,11 @@ class Imagem(Pm):
         return pos
 
     def gerar_lista_pixels(self, debug=False):
-        '''
+        """
         -> This will generate a list containg the RGB of each pixel in the image
         :param debug: If it is true, it will print a confirmation for each X and Y RGB generated
         :return: Will return the list containg the RGB of each pixel
-        '''
+        """
         imagem = Image.open(Pm.photo(self))
         pixel = imagem.load()
         tamanho = imagem.size
@@ -210,53 +211,53 @@ class Imagem(Pm):
         return lista
 
     def tamanho_foto(self):
-        '''
+        """
         -> This will return a tuple with the X and Y size of the photo
         :return: Will return a tuple with the X and Y size of the photo
-        '''
+        """
         imagem = Image.open(Pm.photo(self))
         return imagem.size
 
 
 class Funcoes(Pm):
     def __init__(self):
-        '''
+        """
         -> Constructor
-        '''
+        """
         Pm.__init__(self, 'config.ini')
 
     def pegarListaDict(self, dict, debug=False):
-        '''
+        """
         -> This will return the key values of an dictionary inside a list
         :param dict: The dictionary
         :param debug: If true, will print the debug things
         :return: The list containing the key values
-        '''
-        if debug == True:
+        """
+        if debug:
             print('len dict = ', len(dict))
         lista = list()
         for key in dict.keys():
             lista.append(key)
-        if debug == True:
+        if debug:
             print(lista)
         return lista
 
     def editar_cor(self, r, g, b, delay=True):
-        '''
+        """
         -> A function for changing the color of the selected tool
         :param r: The R value
         :param g: The G value
         :param b: The B value
         :param delay: If true, delay will happen before certain events
         :return: No return
-        '''
+        """
         r = str(r)
         g = str(g)
         b = str(b)
 
         # Moving to edit an added color
         pyautogui.moveTo(x=Pm.colorPalette_colorpos(self)[0], y=Pm.colorPalette_colorpos(self)[1])
-        if delay == True:
+        if delay:
             sleep(2)
         pyautogui.click(button='right')
         pyautogui.moveTo(x=Pm.colorPalette_colorpos(self)[0] + 8, y=Pm.colorPalette_colorpos(self)[1] + 5)
@@ -279,16 +280,16 @@ class Funcoes(Pm):
 
         # Moving to OK button
         pyautogui.moveTo(x=Pm.colorSelector_okbutton(self)[0], y=Pm.colorSelector_okbutton(self)[1])
-        if delay == True:
+        if delay:
             sleep(1)
         pyautogui.click(button='left')
         pyautogui.click(button='left')
 
     def mudar_ferramenta(self):
-        '''
+        """
         -> This will change the Paint's tool
         :return: No return
-        '''
+        """
         ferramenta = Pm.draw_tool(self)
         espessura = Pm.draw_thickness(self)
         opacidade = Pm.draw_opacity(self)
@@ -322,12 +323,12 @@ class Funcoes(Pm):
         pyautogui.click(button='left')
 
     def pos_inicial_desenho(self, pos_tamanhoDesenho, pos_centroCanvas):
-        '''
+        """
         -> This will set the initial position where the cursor will be moved, then it will start to draw
         :param pos_tamanhoDesenho: Must be a tuple with two values. The first value is the X size of the photo. The second value is the Y size of the photo
         :param pos_centroCanvas: Must be a tuple with two values. The first value is the X position of the canvas' center. The second value is the Y position of the canvas' center
         :return: Will return the initial position of the drawing
-        '''
+        """
         x = pos_tamanhoDesenho[0]
         y = pos_tamanhoDesenho[1]
         xmetade = x//2
@@ -340,14 +341,14 @@ class Funcoes(Pm):
         return posicao
 
     def desenhar(self, pos_tamanhoDeseho, pos_centroCanvas, lista_pixels, debug=False):
-        '''
+        """
         -> This will draw the photo on the Paint's canvas
         :param pos_tamanhoDeseho: Must be a tuple with two values. The first value is the X size of the photo. The second value is the Y size of the photo
         :param pos_centroCanvas: A tuple with the X and Y position of the canvas' center
         :param lista_pixels: The list containing the pixels. Must be generated using the gerar_lista_pixels() method
         :param debug: If true, will print the debug things
         :return: No return
-        '''
+        """
         pos_inicial = self.pos_inicial_desenho(pos_tamanhoDeseho, pos_centroCanvas)
 
         cores_diferentes = len(lista_pixels)
@@ -361,14 +362,14 @@ class Funcoes(Pm):
             else:
                 pass
 
-            if debug == True:
+            if debug:
                 print(r, g, b)
-            
+
             pos_diferentes = len(lista_pixels[c][self.pegarListaDict(lista_pixels[c], c)[0]])
 
-            if debug == True:
+            if debug:
                 print('Quantidade de posições diferentes =', pos_diferentes)
-            
+
             self.editar_cor(r, g, b)
 
             for count in range(0, pos_diferentes):
@@ -378,7 +379,7 @@ class Funcoes(Pm):
                 except:
                     x=lista_pixels[c][(r, g, b)][count][0]
                     y=lista_pixels[c][(r, g, b)][count][1]
-                if debug == True:
+                if debug:
                     print(f'x = {x}; y = {y}')
 
                 pyautogui.moveTo(x=pos_inicial[0] + x, y=pos_inicial[1] + y, _pause=False)
