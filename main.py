@@ -136,14 +136,14 @@ class Debug(Pm):
         -> Will return a tuple with the center position of the Canvas
         :return: A tuple with two values. The first one is the X position of the canvas' center. The second one is the Y position of the canvas' center
         """
-        posa = (Pm.canvas_topleftx(self), Pm.canvas_toplefty(self))
-        posb = (Pm.canvas_bottomrightx(self), Pm.canvas_toplefty(self))
-        posc = (Pm.canvas_topleftx(self), Pm.canvas_bottomrighty(self))
-        distx = posa[0] + ((posb[0] - posa[0]) / 2)
-        disty = posa[1] + ((posc[1] - posa[1]) / 2)
-        return (distx, disty)
+        pos_a = (Pm.canvas_topleftx(self), Pm.canvas_toplefty(self))
+        pos_b = (Pm.canvas_bottomrightx(self), Pm.canvas_toplefty(self))
+        pos_c = (Pm.canvas_topleftx(self), Pm.canvas_bottomrighty(self))
+        dist_x = pos_a[0] + ((pos_b[0] - pos_a[0]) / 2)
+        dist_y = pos_a[1] + ((pos_c[1] - pos_a[1]) / 2)
+        return (dist_x, dist_y)
 
-    def fecharPrograma(self):
+    def fechar_programa(self):
         """
         -> A method to exit the program
         :return: No return
@@ -226,7 +226,7 @@ class Funcoes(Pm):
         """
         Pm.__init__(self, 'config.ini')
 
-    def pegarListaDict(self, dict, debug=False):
+    def pegar_lista_dict(self, dict, debug=False):
         """
         -> This will return the key values of an dictionary inside a list
         :param dict: The dictionary
@@ -322,50 +322,50 @@ class Funcoes(Pm):
         pyautogui.move(-80, 0)
         pyautogui.click(button='left')
 
-    def pos_inicial_desenho(self, pos_tamanhoDesenho, pos_centroCanvas):
+    def pos_inicial_desenho(self, pos_tamanhoDesenho, pos_centro_canvas):
         """
         -> This will set the initial position where the cursor will be moved, then it will start to draw
         :param pos_tamanhoDesenho: Must be a tuple with two values. The first value is the X size of the photo. The second value is the Y size of the photo
-        :param pos_centroCanvas: Must be a tuple with two values. The first value is the X position of the canvas' center. The second value is the Y position of the canvas' center
+        :param pos_centro_canvas: Must be a tuple with two values. The first value is the X position of the canvas' center. The second value is the Y position of the canvas' center
         :return: Will return the initial position of the drawing
         """
         x = pos_tamanhoDesenho[0]
         y = pos_tamanhoDesenho[1]
-        xmetade = x//2
-        ymetade = y//2
+        x_metade = x//2
+        y_metade = y//2
 
-        pyautogui.moveTo(pos_centroCanvas[0], pos_centroCanvas[1]) # Centraliza
-        pyautogui.move(0, ymetade * -1) # Move para cima
-        pyautogui.move(xmetade * -1, 0) # Move para a esquerda
+        pyautogui.moveTo(pos_centro_canvas[0], pos_centro_canvas[1]) # Centraliza
+        pyautogui.move(0, y_metade * -1) # Move para cima
+        pyautogui.move(x_metade * -1, 0) # Move para a esquerda
         posicao = pyautogui.position()
         return posicao
 
-    def desenhar(self, pos_tamanhoDeseho, pos_centroCanvas, lista_pixels, debug=False):
+    def desenhar(self, pos_tamanho_desenho, pos_centro_canvas, lista_pixels, debug=False):
         """
         -> This will draw the photo on the Paint's canvas
-        :param pos_tamanhoDeseho: Must be a tuple with two values. The first value is the X size of the photo. The second value is the Y size of the photo
-        :param pos_centroCanvas: A tuple with the X and Y position of the canvas' center
+        :param pos_tamanho_desenho: Must be a tuple with two values. The first value is the X size of the photo. The second value is the Y size of the photo
+        :param pos_centro_canvas: A tuple with the X and Y position of the canvas' center
         :param lista_pixels: The list containing the pixels. Must be generated using the gerar_lista_pixels() method
         :param debug: If true, will print the debug things
         :return: No return
         """
-        pos_inicial = self.pos_inicial_desenho(pos_tamanhoDeseho, pos_centroCanvas)
+        pos_inicial = self.pos_inicial_desenho(pos_tamanho_desenho, pos_centro_canvas)
 
         cores_diferentes = len(lista_pixels)
 
         for c in range(0, cores_diferentes):
-            r = self.pegarListaDict(lista_pixels[c], c)[0][0]
-            g = self.pegarListaDict(lista_pixels[c], c)[0][1]
-            b = self.pegarListaDict(lista_pixels[c], c)[0][2]
-            if len(self.pegarListaDict(lista_pixels[c], c)[0]) == 4:
-                a = self.pegarListaDict(lista_pixels[c], c)[0][3]
+            r = self.pegar_lista_dict(lista_pixels[c], c)[0][0]
+            g = self.pegar_lista_dict(lista_pixels[c], c)[0][1]
+            b = self.pegar_lista_dict(lista_pixels[c], c)[0][2]
+            if len(self.pegar_lista_dict(lista_pixels[c], c)[0]) == 4:
+                a = self.pegar_lista_dict(lista_pixels[c], c)[0][3]
             else:
                 pass
 
             if debug:
                 print(r, g, b)
 
-            pos_diferentes = len(lista_pixels[c][self.pegarListaDict(lista_pixels[c], c)[0]])
+            pos_diferentes = len(lista_pixels[c][self.pegar_lista_dict(lista_pixels[c], c)[0]])
 
             if debug:
                 print('Quantidade de posições diferentes =', pos_diferentes)
@@ -400,4 +400,4 @@ func.mudar_ferramenta() # This will change the drawing tool to the selected one 
 sleep(3)
 
 Thread(target=func.desenhar, args=[foto.tamanho_foto(), debugs.centro_canvas(), lista]).start() # This will thread the "desenhar" method
-Thread(target=debugs.fecharPrograma).start() # This will thread the fecharPrograma method, so the user will be able to exit the program anyways
+Thread(target=debugs.fechar_programa).start() # This will thread the fechar_programa method, so the user will be able to exit the program anyways
