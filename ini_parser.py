@@ -25,18 +25,21 @@ class Parser:
 # -> x=int y=int------------------ <- x=int y=int
 #
 photo = images/photo.png # < - String. The file you want to draw on Paint 3D. Must be inside the 'images' folder by default
+monitor_x = 1920 # <- Integer. The X size of your monitor. 1920 by default
+monitor_y = 1080 # <- Integer. The Y size of your monitor. 1080 by default
 canvas_topleftx = 434 # <- Integer. The X position of the Top Left Corner of your canvas. 434 by default
 canvas_toplefty = 315 # <- Integer. The Y position of the Top Left Corner of your canvas. 315 by default
 canvas_bottomrightx = 1273 # <- Integer. The X position of the Bottom Right Corner of your canvas. 1273 by default
 canvas_bottomrighty = 862 # <- Integer. The Y position of the Bottom Right Corner of your canvas. 862 by default
 canvas_zoom = 33 # <- Integer. The zoom you want your canvas to be. 33 by default
+canvas_zoompos = (1576, 102) # <- Tuple. A tuple with two values. The first one is the X position of the zoom selector. The second one is the Y position of the zoom selector. (1576, 102) by default
 keyboard_interruptionKey = space # <- String. The keyboard key to interrupt the program. 'space' by default
 colorSelector_rpos = (1145, 493) # <- Tuple. A tuple with two values. The first one is the X position of the R value in the color selector. The second one is the Y position of the R value in the color selector. (1145, 493) by default
 colorSelector_gpos = (1145, 550) # <- Tuple. A tuple with two values. The first one is the X position of the G value in the color selector. The second one is the Y position of the G value in the color selector. (1145, 550) by default
 colorSelector_bpos = (1145, 606) # <- Tuple. A tuple with two values. The first one is the X position of the B value in the color selector. The second one is the Y position of the B value in the color selector. (1145, 606) by default
 colorSelector_okbutton = (851, 728) # <- Tuple. A tuple with two values. The first one is the X position of the OK button in the color selector. The second one is the Y position of the OK button in the color selector. (851, 728) by default
 colorPalette_colorpos = (1695, 997) # <- Tuple. A tuple with two values. The first one is the X position of the color to be changed in the color palette. The second one is the Y position of the color to be changed in the color palette. (1695, 997) by default
-draw_tool = pencil # <- String. The tool you want to use. The available tools are: pencil, crayon, "pixelpen. pencil by default
+draw_tool = pencil # <- String. The tool you want to use. The available tools are: pencil, crayon, pixelpen. 'pencil' by default
 draw_thickness = 6 # <- Integer. The thickness of the tool. Must be > 0. 6 by default
 draw_opacity = 60 # <- Integer. The opacity of the tool. Must be > 0 and < 101. 60 by default
 draw_thicknesspos = (1866, 285) # <- Tuple. A tuple with two values. The first one is the X position of the thickness selector on the screen. The second one is the Y position of the thickness selector on the screen. (1866, 285) by default
@@ -58,7 +61,7 @@ delay = 0.001 # Float. The delay of drawing pixels on the canvas. WARNING: Lower
                 linhas += 1
         arquivo.close()
         return linhas
-    
+
     def linhas(self):
         '''
         -> This will generate a list where each index is one line of the file
@@ -71,7 +74,7 @@ delay = 0.001 # Float. The delay of drawing pixels on the canvas. WARNING: Lower
             linhanova = index.replace('\n', '').strip()
             listanova.append(linhanova[:])
         return listanova
-    
+
     def procurarParametro(self, param):
         '''
         -> This will search every line trying to find the specified parameter.
@@ -93,7 +96,7 @@ delay = 0.001 # Float. The delay of drawing pixels on the canvas. WARNING: Lower
                 contagem+= 1
                 pass
         return listaLinhas[linha]
-    
+
     def posIgual(self, linha):
         '''
         -> Will find the "=" position on the line
@@ -129,9 +132,9 @@ delay = 0.001 # Float. The delay of drawing pixels on the canvas. WARNING: Lower
         :param type: The type you want to return the values. Currently, there are this options: 'tuple_int', 'int', 'str', 'float'. Please, specify correctly to each one
         :return: Will return the value for the line.
         '''
-        tipos = ['tuple_int', 'int', 'str', 'float']
+        TIPOS = ['tuple_int', 'int', 'str', 'float']
         arg =  linha[self.posIgual(linha) + 1 : self.posComent(linha)].strip()
-        if type not in tipos:
+        if type not in TIPOS:
             raise TypeError('Type not available')
         if type == 'tuple_int':
             try:
@@ -142,22 +145,22 @@ delay = 0.001 # Float. The delay of drawing pixels on the canvas. WARNING: Lower
                     integer = int(item)
                     listanova.append(integer)
                 return tuple(listanova)
-            except:
+            except Exception:
                 raise TypeError('Not possible to convert to the specified type.')
         elif type == 'int':
             try:
                 return int(arg)
-            except:
+            except Exception:
                 raise TypeError('Not possible to convert to the specified type.')
         elif type == 'str':
             try:
                 return arg
-            except:
+            except Exception:
                 raise TypeError('Not possible to convert to the specified type.')
         elif type == 'float':
             try:
                 return float(arg)
-            except:
+            except Exception:
                 raise TypeError('Not possible to convert to the specified type.')
 
 
@@ -169,6 +172,12 @@ class Parameters(Parser):
 
     def photo(self):
         return self.argumento(self.procurarParametro('photo'), 'str')
+
+    def monitor_x(self):
+        return self.argumento(self.procurarParametro('monitor_x'), 'int')
+
+    def monitor_y(self):
+        return self.argumento(self.procurarParametro('monitor_y'), 'int')
 
     def canvas_topleftx(self):
         return self.argumento(self.procurarParametro('canvas_topleftx'), 'int')
@@ -184,6 +193,9 @@ class Parameters(Parser):
 
     def canvas_zoom(self):
         return self.argumento(self.procurarParametro('canvas_zoom'), 'int')
+
+    def canvas_zoompos(self):
+        return self.argumento(self.procurarParametro('canvas_zoompos'), 'tuple_int')
 
     def keyboard_interruptionKey(self):
         return self.argumento(self.procurarParametro('keyboard_interruptionKey'), 'str')
@@ -220,3 +232,8 @@ class Parameters(Parser):
 
     def delay(self):
         return self.argumento(self.procurarParametro('delay'), 'float')
+
+if __name__ == '__main__':
+    pass
+else:
+    Parameters('config.ini').escrever()
