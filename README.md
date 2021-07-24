@@ -4,6 +4,15 @@ EN: A script designed for autodrawing pictures in Paint 3D. Right now the progra
 
 PT-BR: Um script feito para desenhar imagens automaticamente no Paint 3D. Veja a seguir as noções básicas de como utilizar o script.
 
+## EN: Requirements | PT-BR: Requisitos
+
+- [Windows 10](https://www.microsoft.com/software-download/windows10)
+- [Paint 3D](https://www.microsoft.com/en-us/p/paint-3d/9nblggh5fv99?source=lp&activetab=pivot:overviewtab)
+- [Python 3.8+](https://www.python.org/)
+- [PyAutoGUI](https://pypi.org/project/PyAutoGUI/)
+- [Keyboard](https://pypi.org/project/keyboard/)
+- [Pillow](https://pypi.org/project/Pillow/)
+
 ## EN: How to use it | PT-BR: How to use it
 
 :warning: EN: **IT IS VERY IMPORTANT FOR YOU TO READ THIS PART** :warning:
@@ -70,4 +79,26 @@ EN: As you may see, the X and Y position of the values inside the _config.ini_ f
 
 PT-BR: Como você pode ver, as posições X e Y dos valores dentro do arquivo _config.ini_ são específicamente feitos para a minha resolução (1920x1080, Full HD), então, se você têm uma resolução diferente, muito provavelmente você irá precisar mudar alguns valores. Para pegar as coordenadas da tela, há o script *get_x_y.py* que irá te ajudar no mesmo. Então, abra-o (eu recomendo abrir o script com o Prompt de Comando) e aperte Control (pode ser tanto o esquerdo como o direito) para pegar a posição atual do cursor. Veja a captura de tela abaixo.
 
-<img scr="README/get_x_y_example.png">
+![](README/example1.png)
+
+EN: Notice that the X and Y position in the prompt are both 0, that's because my cursor was at the top left edge (anyways, the cursor wasn't captured in the screenshot). Obviously, if you change the cursor's position, the coordinates will change too.
+
+PT-BR: Repare que as posições X e Y no prompt são 0, isso é porque meu cursor estava no canto superior esquerdo (todavia, o cursor não foi capturado na captura de tela). Obviamente, se você mudar a posição do cursor, as coordenadas irão mudar também.
+
+### EN: Understanding "canvas" | PT-BR: Entendendo o "canvas"
+
+EN: Canvas is the drawable area that the script will be using for the drawing. Take a look at the screenshot below.
+
+PT-BR: O canvas é a área na qual o programa irá usar para desenhar. Repare na captura de tela abaixo.
+
+![](README/example2.png)
+
+EN: I loaded up a simple image: an A4 paper flipped horizontally with a black border in a black background. The point is: I just want the script to draw within the borders, so, how do I do this? It's easy: just take the top left corner and bottom right corner XY position and set it up on the `canvas_topleftx`, `canvas_toplefty`, `canvas_bottomrightx`, `canvas_bottomrighty` parameters inside the _config.ini_ file. If you want to check the drawable area you have, just run the *draw_drawingarea.py* script that it will automatically draw the borders for you. Check the example below.
+
+PT-BR: Eu abri uma imagem simples: uma folha A4 virada na horizontal com uma margem preta num fundo preto. O ponto é: eu somente quero que o script desenhe dentro da margem, então, como é que eu faço isso? É fácil: é só pegar as posições XY do canto superior esquerdo e do canto inferior direito e colocá-las nos parâmetros `canvas_topleftx`, `canvas_toplefty`, `canvas_bottomrightx`, `canvas_bottomrighty` dentro do arquivo _config.ini_. Se você deseja conferior a área desenhável que você possui, basta rodar o script *draw_drawingarea.py* que irá desenhar automáticamente as margens para você. Olhe o exemplo abaixo.
+
+![](README/example3.png)
+
+EN: Once I runned the *draw_drawingarea.py* script, a red border was drawn representing the drawable area I have. The program will only be able to draw within this area. Also, the drawing will be in the center of the canvas.
+
+PT-BR: Uma vez que eu rodei o script *draw_drawingarea.py*, uma margem vermelha foi desenhada representando o espaço desenhável que eu tenho. O programa apenas irá desenhar dentro dessa área. Além disso, o desenho será no centro do "canvas".
