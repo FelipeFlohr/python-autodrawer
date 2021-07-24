@@ -6,13 +6,6 @@ from time import sleep
 from threading import Thread
 from ini_parser import Parameters as Pm
 
-# Pega o valor RGB de um pixel de uma imagem
-# imagem = Image.open('imagemteste.png')
-# pixel = imagem.load()
-# tamanho = imagem.size
-# print(imagem.size)
-# print('0, 0', pixel[0, 0])
-
 # quadro no paint
 # -> x=434 y=315------------------ <- x=1273 y=315
 #               |                |
@@ -25,15 +18,15 @@ from ini_parser import Parameters as Pm
 
 
 class Debug(Pm):
-    def __init__(self, monitor_x=1920, monitor_y=1080):
-        '''
+    def __init__(self):
+        """
         -> Constructor
         :param monitor_x: The X size of your monitor
         :param monitor_y: The Y size of your monitor
-        '''
+        """
         Pm.__init__(Pm, 'config.ini')
-        self.monitor_x = monitor_x
-        self.monitor_y = monitor_y
+        self.monitor_x = Pm.monitor_x(self)
+        self.monitor_y = Pm.monitor_y(self)
 
     def verificar_imagem_tamanho(self, imagem_tamanho):
         """
@@ -96,7 +89,7 @@ class Debug(Pm):
         pyautogui.move(20, 210)
         pyautogui.click(button='left')
         pyautogui.click(button='left')
-        pyautogui.moveTo(x=1576, y=102)
+        pyautogui.moveTo(x=Pm.canvas_zoompos(self)[0], y=Pm.canvas_zoompos(self)[1])
         pyautogui.click(button='left')
         pyautogui.write(str(Pm.canvas_zoom(self)))
         pyautogui.press('enter')
@@ -233,8 +226,6 @@ class Funcoes(Pm):
         :param debug: If true, will print the debug things
         :return: The list containing the key values
         """
-        if debug:
-            print('len dict = ', len(dict))
         lista = list()
         for key in dict.keys():
             lista.append(key)
@@ -296,8 +287,10 @@ class Funcoes(Pm):
         espessura_pos = Pm.draw_thicknesspos(self)
         opacidade_pos = Pm.draw_opacitypos(self)
 
-        ferramentas = {'pencil': (1699, 212), 'crayon': (1786, 214), 'pixelpen': (1876, 155)}
-        if ferramenta not in ferramentas:
+        FERRAMENTAS = {'pencil': (1699, 212), 
+                       'crayon': (1786, 214), 
+                       'pixelpen': (1876, 155)}
+        if ferramenta not in FERRAMENTAS:
             raise ValueError('Ferramenta não está na lista de ferramentas')
         try:
             int(espessura)
@@ -305,7 +298,7 @@ class Funcoes(Pm):
             raise TypeError('Espessura não é um número inteiro.')
 
         # Muda a ferramenta
-        pyautogui.moveTo(x=ferramentas[ferramenta][0], y=ferramentas[ferramenta][1])
+        pyautogui.moveTo(x=FERRAMENTAS[ferramenta][0], y=FERRAMENTAS[ferramenta][1])
         pyautogui.click(button='left')
 
         # Muda a espessura
@@ -387,17 +380,17 @@ class Funcoes(Pm):
                 sleep(Pm.delay(self))
 
 
-debugs = Debug() # The Debug class variable
-foto = Imagem() # The Imagem class variable
-func = Funcoes() # The Funcoes class variable
+if __name__ == '__main__':
+    debugs = Debug() # The Debug class variable
+    foto = Imagem() # The Imagem class variable
+    func = Funcoes() # The Funcoes class variable
 
-Pm('config.ini').escrever() # This will write the "config.ini" file, in case it doesn't exist
-print(debugs.tamanho_monitor()) # This will print the computer's resolution
-debugs.centralizar_canvas() # This will centralize the canvas
-debugs.verificar_imagem_tamanho(foto.tamanho_foto()) # This is going to verify the image size
-lista = foto.gerar_lista_pixels() # This is going to generate a list containing the pixels
-func.mudar_ferramenta() # This will change the drawing tool to the selected one on the "config.ini"
-sleep(3)
+    print(debugs.tamanho_monitor()) # This will print the computer's resolution
+    debugs.centralizar_canvas() # This will centralize the canvas
+    debugs.verificar_imagem_tamanho(foto.tamanho_foto()) # This is going to verify the image size
+    lista = foto.gerar_lista_pixels() # This is going to generate a list containing the pixels
+    func.mudar_ferramenta() # This will change the drawing tool to the selected one on the "config.ini"
+    sleep(3)
 
-Thread(target=func.desenhar, args=[foto.tamanho_foto(), debugs.centro_canvas(), lista]).start() # This will thread the "desenhar" method
-Thread(target=debugs.fechar_programa).start() # This will thread the fechar_programa method, so the user will be able to exit the program anyways
+    Thread(target=func.desenhar, args=[foto.tamanho_foto(), debugs.centro_canvas(), lista]).start() # This will thread the "desenhar" method
+    Thread(target=debugs.fechar_programa).start() # This will thread the fechar_programa method, so the user will be able to exit the program anyways
