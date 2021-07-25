@@ -4,7 +4,7 @@ EN: A script designed for autodrawing pictures in Paint 3D. Right now the progra
 
 PT-BR: Um script feito para desenhar imagens automaticamente no Paint 3D. Veja a seguir as noções básicas de como utilizar o script.
 
-## EN: Requirements | PT-BR: Requisitos
+## 1. EN: Requirements | PT-BR: Requisitos
 
 - [Windows 10](https://www.microsoft.com/software-download/windows10)
 - [Paint 3D](https://www.microsoft.com/en-us/p/paint-3d/9nblggh5fv99?source=lp&activetab=pivot:overviewtab)
@@ -13,19 +13,19 @@ PT-BR: Um script feito para desenhar imagens automaticamente no Paint 3D. Veja a
 - [Keyboard](https://pypi.org/project/keyboard/)
 - [Pillow](https://pypi.org/project/Pillow/)
 
-## EN: How to use it | PT-BR: How to use it
+## 2. EN: How to use it | PT-BR: How to use it
 
 :warning: EN: **IT IS VERY IMPORTANT FOR YOU TO READ THIS PART** :warning:
 
 :warning: PT-BR: **É DE SUMA IMPORTÂNCIA QUE VOCÊ LEIA ESTA PARTE** :warning:
 
-### EN: The first step | PT-BR: O primeiro passo
+### 2.1 EN: The first step | PT-BR: O primeiro passo
 
 EN: The first step is to run the script and then close. Once you did it, a file called **config.ini** will be on the root folder of the script, open it. Now we are going to see the parameters to change inside the file.
 
 PT-BR: O primeiro passo é executar o script e fechar logo em seguida. Uma vez feito, um arquivo chamado **config.ini** irá aparecer na pasta raiz do script, abra-o. Agora veremos os parâmetros dentro do arquivo.
 
-### EN: The "config.ini" file | PT-BR: O arquivo "config.ini"
+### 2.2 EN: The "config.ini" file | PT-BR: O arquivo "config.ini"
 
 EN: The **config.ini** is the file for changing the parameters. Let's take a look on what we can change here :arrow_heading_down:
 
@@ -73,7 +73,25 @@ PT-BR: O arquivo **config.ini** serve para mudar os parâmetros. Vamos dar uma o
 
 21.  `delay` **EN**: The delay value of drawing pixels on the canvas. :warning: **WARNING** :warning:: Lower values might crash/glitch Paint 3D. If you are experiencing glitches even with the default value, please INCREASE the value. 0.001 by default. Must be a float | **PT-BR**: O valor do delay de desenhar pixels no canvas. :warning: **ATENÇÃO** :warning:: Valores mais baixos podem causar travamentos ou bugs no Paint 3D. Se você estiver presenciando bugs/glitches/erros com o valor padrão, por favor AUMENTE-O. 0.001 por padrão. O valor deve ser do tipo float.
 
-### EN: Getting the screen positions | PT-BR: Pegando as posições na tela
+### 2.2.1 EN: Understanding the parameters with Paint 3D | Entendendo os parâmetros com o Paint 3D
+
+EN: Take a look on the screenshot below.
+
+PT-BR: Repare na captura de tela abaixo.
+
+![](README/example4.png)
+
+EN: Notice that each number represents a topic above with the respective positions. Also, take a look on the 14th topic (the `colorPalette_colorpos` parameter): if it is your first time using Paint 3D and/or you haven't created a custom color yet, just press the add button and create a custom color (it can be any color, just create). Now, take a look on the screenshot below.
+
+PT-BR: Repare que cada número representa um tópico acima com as respectivas posições. Agora, repare o tópico 14 (o parâmetro `colorPalette_colorpos`): se é a sua primeira vez usando Paint 3D e/ou você nunca criou uma cor personalizada, aperte o botão com o símbolo "+" e crie uma cor personalizada (pode ser qualquer cor, apenas crie). Agora repare na captura de tela abaixo.
+
+![](README/example5.png)
+
+EN: If you right click on your custom color and click on _edit_, this color editor will open. And again: each number is related to a topic above. To get the screen positions, the next topic will cover this.
+
+PT-BR: Se você clicar com o botão direito do mouse na cor personalizada e clicar em _editar_, este editor de cores irá abrir. E novamente: cada número está relacionado com um tópico acima. Para pegar as posições da tela, o próximo tópico irá abordar isto.
+
+### 2.2.2 EN: Getting the screen positions | PT-BR: Pegando as posições na tela
 
 EN: As you may see, the X and Y position of the values inside the _config.ini_ file are designed specifically for my resolution (1920x1080, Full HD), so if you have a different resolution, you'll need to change some values. To get the screen coordinates, there's a script inside the _tools_ folder called *get_x_y.py* that will help you. So, run it (I would recommend open it with Command Prompt) and press Control (can be both left or right) to get the current XY cursor position. Check out the screenshot below.
 
@@ -85,7 +103,7 @@ EN: Notice that the X and Y position in the prompt are both 0, that's because my
 
 PT-BR: Repare que as posições X e Y no prompt são 0, isso é porque meu cursor estava no canto superior esquerdo (todavia, o cursor não foi capturado na captura de tela). Obviamente, se você mudar a posição do cursor, as coordenadas irão mudar também.
 
-### EN: Understanding "canvas" | PT-BR: Entendendo o "canvas"
+### 2.3 EN: Understanding "canvas" | PT-BR: Entendendo o "canvas"
 
 EN: Canvas is the drawable area that the script will be using for the drawing. Take a look at the screenshot below.
 
@@ -99,6 +117,6 @@ PT-BR: Eu abri uma imagem simples: uma folha A4 virada na horizontal com uma mar
 
 ![](README/example3.png)
 
-EN: Once I runned the *draw_drawingarea.py* script, a red border was drawn representing the drawable area I have. The program will only be able to draw within this area. Also, the drawing will be in the center of the canvas.
+EN: Once I runned the *draw_drawingarea.py* script, a red border was drawn representing the drawable area I have. The program will only be able to draw within this area. Also, the drawing will be in the center of the canvas. Also, notice that the image is 4000x2250px and my zoom is set to 33% because it is the better choice for me. Obviously, if you have a different image and/or a different resolution, you'll need to change the parameters inside _config.ini_.
 
-PT-BR: Uma vez que eu rodei o script *draw_drawingarea.py*, uma margem vermelha foi desenhada representando o espaço desenhável que eu tenho. O programa apenas irá desenhar dentro dessa área. Além disso, o desenho será no centro do "canvas".
+PT-BR: Uma vez que eu rodei o script *draw_drawingarea.py*, uma margem vermelha foi desenhada representando o espaço desenhável que eu tenho. O programa apenas irá desenhar dentro dessa área. Além disso, o desenho será no centro do "canvas". Também repare que a imagem é 4000x2250px e o meu zoom está em 33%, pois é a melhor escolha para mim. Obviamente, se você tiver uma imagem diferente e/ou um monitor diferente, você terá que mudar os parâmetros dentro de _config.ini_.
