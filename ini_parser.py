@@ -44,7 +44,7 @@ draw_thickness = 6 # <- Integer. The thickness of the tool. Must be > 0. 6 by de
 draw_opacity = 60 # <- Integer. The opacity of the tool. Must be > 0 and < 101. 60 by default
 draw_thicknesspos = (1866, 285) # <- Tuple. A tuple with two values. The first one is the X position of the thickness selector on the screen. The second one is the Y position of the thickness selector on the screen. (1866, 285) by default
 draw_opacitypos = (1863, 365) # <- Tuple. A tuple with two values. The first one is the X position of the opacity selector on the screen. The second one is the Y position of the opacity selector on the screen. (1863, 365) by default
-delay = 0.001 # Float. The delay of drawing pixels on the canvas. WARNING: Lower values might crash/glitch Paint 3D. If you are experiencing glitches even with the default value, please INCREASE the value. 0.001 by default
+delay = 0.01 # Float. The delay of drawing pixels on the canvas. WARNING: Lower values might crash/glitch Paint 3D. If you are experiencing glitches even with the default value, please INCREASE the value. 0.01 by default
 ''')
         except:
             print('Arquivo já existente')
