@@ -150,3 +150,7 @@ Q: **EN**: What are the default values designed for? | **PT-BR**: Para que siste
 Q: **EN**: There's a bug I want to report, how can I reach you? | **PT-BR**: Há um bug na qual eu desejo reportar, como posso contactá-lo?
 
 - A/R: **EN**: You can open a discussion here in this repository or reach me on my email: *felipeflohrlol@gmail.com*. Feel free to call me there | **PT-BR**: Você pode abrir uma discussão aqui neste repositório ou me chamar no meu email: *felipeflohrlol@gmail.com*. Sinta-se a vontade para me chamar lá.
+
+Q: **EN**: Why did you made this? This is useless. | **PT-BR**: Por que você fez isso? Isso é inútil.
+
+- A/R: **EN**: The reason I made this script was because my art teacher was sending a lot of homework to do (seriously, a lot), and since I'm having online classes I thought of doing this script as a way to help me doing the homework | **PT-BR**: O motivo de eu ter feito este script é porque a minha professora de artes estava mandando muita tarefa para eu fazer (sério, muita tarefa mesmo), e já que eu estou fazendo EAD, eu pensei em fazer este script como uma maneira de me ajudar a fazer as tarefas.
