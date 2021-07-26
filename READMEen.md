@@ -85,7 +85,7 @@ As you may see, the X and Y position of the values inside the _config.ini_ file 
 
 Notice that the X and Y position in the prompt are both 0, that's because my cursor was at the top left edge (anyways, the cursor wasn't captured in the screenshot). Obviously, if you change the cursor's position, the coordinates will change too.
 
-### 2.3  Understanding "canvas" | PT-BR: Entendendo o "canvas"
+### 2.3  Understanding "canvas"
 
 Canvas is the drawable area that the script will be using for the drawing. Take a look at the screenshot below.
 
@@ -97,7 +97,7 @@ I loaded up a simple image: an A4 paper flipped horizontally with a black border
 
 Once I runned the *draw_drawingarea.py* script, a red border was drawn representing the drawable area I have. The program will only be able to draw within this area. Also, the drawing will be in the center of the canvas. Also, notice that the image is 4000x2250px and my zoom is set to 33% because it is the better choice for me. Obviously, if you have a different image and/or a different resolution, you'll need to change the parameters inside _config.ini_.
 
-## 3.  Running the script | PT-BR: Rodando o script
+## 3.  Running the script
 
 Once you set every parameter and coordinate on _config.ini_ and the main file (if your resolution is not 1920x1080), just run the script and change to the Paint 3D as your active window. The script will run without any problems if you followed every step above. You can see the script running on the video below.
 

@@ -97,7 +97,7 @@ Eu abri uma imagem simples: uma folha A4 virada na horizontal com uma margem pre
 
 Uma vez que eu rodei o script *draw_drawingarea.py*, uma margem vermelha foi desenhada representando o espaço desenhável que eu tenho. O programa apenas irá desenhar dentro dessa área. Além disso, o desenho será no centro do "canvas". Também repare que a imagem é 4000x2250px e o meu zoom está em 33%, pois é a melhor escolha para mim. Obviamente, se você tiver uma imagem diferente e/ou um monitor diferente, você terá que mudar os parâmetros dentro de _config.ini_.
 
-## 3. EN: Running the script | Rodando o script
+## 3. Rodando o script
 
 Uma vez que você configurou cada parâmetro e coordenada no arquivo _config.ini_ e no _main_ (se sua resolução não for 1920x1080), apenas rode o script e deixe o Paint 3D como sua janela ativa. O script irá rodar sem nenhum problema se você seguiu todos os passos acima. Você pode ver o script rodando no vídeo abaixo.
 
