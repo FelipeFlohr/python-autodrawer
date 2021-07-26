@@ -6,7 +6,7 @@ PT-BR: Um script feito para desenhar imagens automaticamente no Paint 3D. Veja a
 
 ## 1. EN: Requirements | PT-BR: Requisitos
 
-- [Windows 10](https://www.microsoft.com/software-download/windows10)
+- [Windows 10+](https://www.microsoft.com/software-download/windows10)
 - [Paint 3D](https://www.microsoft.com/en-us/p/paint-3d/9nblggh5fv99?source=lp&activetab=pivot:overviewtab)
 - [Python 3.8+](https://www.python.org/)
 - [PyAutoGUI](https://pypi.org/project/PyAutoGUI/)
@@ -71,7 +71,7 @@ PT-BR: O arquivo **config.ini** serve para mudar os parâmetros. Vamos dar uma o
 
 20.  `draw_opacitypos` **EN**: A tuple with two values. The first one is the X position of the opacity selector on the screen. The second one is the Y position of the opacity selector on the screen. (1863, 365) by default. Must be a tuple | **PT-BR**: Uma tupla com dois valores. O primeiro é a posição X do selecionador de opacidade na tela. O segundo valor é a posição Y do selecionador de opacidade na tela. (1863, 365) por padrão. O valor deve ser uma tupla.
 
-21.  `delay` **EN**: The delay value of drawing pixels on the canvas. :warning: **WARNING** :warning:: Lower values might crash/glitch Paint 3D. If you are experiencing glitches even with the default value, please INCREASE the value. 0.001 by default. Must be a float | **PT-BR**: O valor do delay de desenhar pixels no canvas. :warning: **ATENÇÃO** :warning:: Valores mais baixos podem causar travamentos ou bugs no Paint 3D. Se você estiver presenciando bugs/glitches/erros com o valor padrão, por favor AUMENTE-O. 0.001 por padrão. O valor deve ser do tipo float.
+21.  `delay` **EN**: The delay value of drawing pixels on the canvas. :warning: **WARNING** :warning:: Lower values might crash/glitch Paint 3D. If you are experiencing glitches even with the default value, please INCREASE the value. 0.01 by default. Must be a float | **PT-BR**: O valor do delay de desenhar pixels no canvas. :warning: **ATENÇÃO** :warning:: Valores mais baixos podem causar travamentos ou bugs no Paint 3D. Se você estiver presenciando bugs/glitches/erros com o valor padrão, por favor AUMENTE-O. 0.01 por padrão. O valor deve ser do tipo float.
 
 ### 2.2.1 EN: Understanding the parameters with Paint 3D | Entendendo os parâmetros com o Paint 3D
 
@@ -120,3 +120,33 @@ PT-BR: Eu abri uma imagem simples: uma folha A4 virada na horizontal com uma mar
 EN: Once I runned the *draw_drawingarea.py* script, a red border was drawn representing the drawable area I have. The program will only be able to draw within this area. Also, the drawing will be in the center of the canvas. Also, notice that the image is 4000x2250px and my zoom is set to 33% because it is the better choice for me. Obviously, if you have a different image and/or a different resolution, you'll need to change the parameters inside _config.ini_.
 
 PT-BR: Uma vez que eu rodei o script *draw_drawingarea.py*, uma margem vermelha foi desenhada representando o espaço desenhável que eu tenho. O programa apenas irá desenhar dentro dessa área. Além disso, o desenho será no centro do "canvas". Também repare que a imagem é 4000x2250px e o meu zoom está em 33%, pois é a melhor escolha para mim. Obviamente, se você tiver uma imagem diferente e/ou um monitor diferente, você terá que mudar os parâmetros dentro de _config.ini_.
+
+## 3. EN: Running the script | PT-BR: Rodando o script
+
+ EN: Once you set every parameter and coordinate on _config.ini_ and the main file (if your resolution is not 1920x1080), just run the script and change to the Paint 3D as your active window. The script will run without any problems if you followed every step above. You can see the script running on the video below.
+
+PT-BR: Uma vez que você configurou cada parâmetro e coordenada no arquivo _config.ini_ e no _main_ (se sua resolução não for 1920x1080), apenas rode o script e deixe o Paint 3D como sua janela ativa. O script irá rodar sem nenhum problema se você seguiu todos os passos acima. Você pode ver o script rodando no vídeo abaixo.
+
+[![Video](README/thumbnail.png)](https://www.youtube.com/watch?v=mbPgQSFNbo4 "Video")
+
+EN: If you followed the steps above, probably you'll not find any problems, but, if you find, it is probably related to the screen coordinates, so be aware that you may need to change it inside *config.ini* and the main file.
+
+PT-BR: Se você seguiu todos os passos acima, provavelmente você não irá encontrar nenhum problema, mas caso encontre, provavelmente estará relacionado ás suas coordenadas de tela, então fique atento pois você talvez tenha que mudar as configurações dentro do *config.ini* e do arquivo _main_
+
+## 4. FAQ
+
+Q: **EN**: Paint 3D is crashing/slowing down/glitching, how do I solve? | **PT-BR**: Paint 3D está crashando/travando/bugando, como eu resolvo isso?
+
+- A/R: **EN**: As written in the _config.ini_, this is probably related to the `delay` parameter. You may need to increase the value to stop slowing down Paint 3D | **PT-BR**: Como está escrito no _config.ini_, isso provavelmente está relacionado ao parâmetro `delay`. Você provavelmente irá precisar aumentar o valor para parar os travamentos no Paint 3D.
+
+Q: **EN**: Can you briefly explain how this script works? | **PT-BR**: Teria como você explicar brevemente como este script funciona?
+
+- A/R: **EN**: This script works by iterating with each pixel on your desirable picture, then, putting the R/G/B/A values inside a list. With this list, the script will automatically use the keyboard and cursor (like a Macro) to work with Paint 3D and automatically draw on the canvas | **PT-BR**: Este script funciona iterando com cada pixel na foto desejável, e então, colocando os valores R/G/B/A dentro de uma lista. Com esta lista, o script irá automaticamente usar o teclado e o mouse (como um Macro) para trabalhar no Paint 3D e automaticamente desenhar dentro do canvas.
+
+Q: **EN**: What are the default values designed for? | **PT-BR**: Para que sistema foi projetado os valores padrões?
+
+- A/R: **EN**: The default values are designed for a 1920x1080 monitor, running on a 4000x2250px canvas. So, if you want to quickly use the script, just change the `photo` parameter inside *config.ini* and set the canvas to 4000x2250px on Paint 3D | **PT-BR**: Os valores padrões foram projetados para um monitor 1920x1080, rodando-os num canvas 4000x2250px. Então se você deseja rapidamente usar o script, apenas mudar o parâmetro `photo` dentro do arquivo *config.ini* e ajuste o canvas para 4000x2250px no Paint 3D.
+
+Q: **EN**: There's a bug I want to report, how can I reach you? | **PT-BR**: Há um bug na qual eu desejo reportar, como posso contactá-lo?
+
+- A/R: **EN**: You can open a discussion here in this repository or reach me on my email: *felipeflohrlol@gmail.com*. Feel free to call me there | **PT-BR**: Você pode abrir uma discussão aqui neste repositório ou me chamar no meu email: *felipeflohrlol@gmail.com*. Sinta-se a vontade para me chamar lá.
