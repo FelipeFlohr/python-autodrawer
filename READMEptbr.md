@@ -117,7 +117,7 @@ Q: Teria como você explicar brevemente como este script funciona?
 
 Q: Para que sistema foi projetado os valores padrões?
 
-- R: Os valores padrões foram projetados para um monitor 1920x1080, rodando-os num canvas 4000x2250px. Então se você deseja rapidamente usar o script, apenas mudar o parâmetro `photo` dentro do arquivo *config.ini* e ajuste o canvas para 4000x2250px no Paint 3D.
+- R: Os valores padrões foram projetados para um monitor 1920x1080, rodando-os num canvas 4000x2250px. Então se você deseja rapidamente usar o script, apenas mude o parâmetro `photo` dentro do arquivo *config.ini* e ajuste o canvas para 4000x2250px no Paint 3D.
 
 Q: Há um bug na qual eu desejo reportar, como posso contactá-lo?
 
